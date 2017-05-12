@@ -1,0 +1,277 @@
+#!/usr/bin/python3
+
+import sys
+import random
+import os
+import argparse
+
+
+####### Parse input arguments into variables  ##############
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--station', '-s', help="Station destination identity")
+	## Replicate above line to add more optional input arguments
+	
+	args = parser.parse_args()
+	print()
+	print("Retrieving station details for station Ident: ", args.station)
+	station = args.station
+######## END Processing input args into variables ############
+
+
+
+
+
+
+
+
+
+
+
+
+################ CLASS DEFINITION FOR SEND CONNECTION ##############
+class sendObj:
+	__station_ident = None
+	__station_ip = None
+	__station_port = None
+	__station_mode = None
+	__station_mbps_down_limit = None
+	__station_mbps_down_pref = None
+	__station_mbps_up_limit = None
+	__station_mbps_up_pref = None
+	__station_contact_name = None
+	__station_contact_phone = None
+	__station_contact_email = None
+	__station_contact_company = None
+	__station_contact_notes = None
+
+	def __init__(	self, station_ident):
+		self.__station_ident = station_ident
+
+	def set_station_ip(self, station_ip):
+		self.__station_ip = station_ip
+
+	def set_station_port(self, station_port):
+		self.__station_port = station_port
+
+	def set_station_mode(self, station_mode):
+		self.__station_mode = station_mode
+
+	def set_station_mbps_down_limit(self, station_mbps_down_limit):
+		self.__station_mbps_down_limit = station_mbps_down_limit
+
+	def set_station_mbps_down_pref(self, station_mbps_down_pref):
+		self.__station_mbps_down_pref = station_mbps_down_pref
+
+	def set_station_mbps_up_limit(self, station_mbps_up_limit):
+		self.__station_mbps_up_limit = station_mbps_up_limit
+
+	def set_station_mbps_up_pref(self, station_mbps_up_pref):
+		self.__station_mbps_up_pref = station_mbps_up_pref
+
+	def set_station_contact_name(self, station_contact_name):
+		self.__station_contact_name = station_contact_name
+
+	def set_station_contact_phone(self, station_contact_phone):
+		self.__station_contact_phone = station_contact_phone
+
+	def set_station_contact_email(self, station_contact_email):
+		self.__station_contact_email = station_contact_email
+
+	def set_station_contact_company(self, station_contact_company):
+		self.__station_contact_company = station_contact_company
+
+	def set_station_contact_notes(self, station_contact_notes):
+		self.__station_contact_notes = station_contact_notes
+
+	####  ADD MORE SET STATMENTS ABOVE THIS LINE
+	####  ADD GET STATEMENTS BELOW THIS LINE
+
+	def get_station_ident(self):
+		return(self.__station_ident)
+
+	def get_station_ip(self):
+		return(self.__station_ip)
+
+	def get_station_port(self):
+		return(self.__station_port)
+
+	def get_station_mode(self):
+		return(self.__station_mode)
+
+	def get_station_mbps_down_limit(self):
+		return(self.__station_mbps_down_limit)
+
+	def get_station_mbps_down_pref(self):
+		return(self.__station_mbps_down_pref)
+
+	def get_station_mbps_up_limit(self):
+		return(self.__station_mbps_up_limit)
+
+	def get_station_mbps_up_pref(self):
+		return(self.__station_mbps_up_pref)
+
+	def get_station_contact_name(self):
+		return(self.__station_contact_name)
+
+	def get_station_contact_phone(self):
+		return(self.__station_contact_phone)
+
+	def get_station_contact_email(self):
+		return(self.__station_contact_email)
+
+	def get_station_contact_company(self):
+		return(self.__station_contact_company)
+
+	def get_station_contact_company(self):
+		return(self.__station_contact_company)
+
+	def get_station_contact_notes(self):
+		return(self.__station_contact_notes)
+
+
+	####  OTHER OBJECT FUNCTIONS
+
+
+################# END OF CLASS DEFINITION  ####################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############## FUNC GET CURRENT STATION INFO #############
+## This funtion:
+#### connects to the database and pulls full record where based 
+#### on station name match.
+
+def updateSend (station):
+	from configparser import ConfigParser
+	### Pull db host/user/pass from config.ini
+	parser = ConfigParser()
+	parser.read('config.ini')
+
+	#convert list to dictionary
+	config=dict(parser.items('stationDatabase'))
+
+	#set usable variables 	
+	dbhost=(config.get("dbhost"))
+	dbuser=(config.get("dbuser"))
+	dbpass=(config.get("dbpass"))
+	dbname=(config.get("dbname"))
+	dbtable=(config.get("dbtable"))
+
+	#print confirmation of variables loaded
+	##print('dbhost: ', dbhost)
+	##print('dbuser: ', dbuser)
+	##print('dbpass: ', dbpass)
+	##print('dbname: ', dbname)
+	##print('dbtable:', dbtable)
+
+	import pymysql
+	import pymysql.cursors
+	## Connect to db
+	conn=pymysql.connect(host=dbhost, user=dbuser, passwd=dbpass, db=dbname, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+	try:
+		with conn.cursor() as cursor:
+			## Read the record
+			sql = "SELECT * FROM `{}` WHERE ident=\"{}\"".format(dbtable, station)
+			##print("PySQL: ", sql)
+			cursor.execute(sql)
+			result = cursor.fetchone()
+			##print(result)
+	finally:
+		conn.close
+
+	## update sendObj (object with all destination station properties)
+
+	sendConnection.set_station_ip(result.get('ip'))
+	sendConnection.set_station_port(result.get('port'))
+	sendConnection.set_station_mode(result.get('mode'))
+	sendConnection.set_station_mbps_down_limit(result.get('mbps_down_limit'))
+	sendConnection.set_station_mbps_down_pref(result.get('mbps_down_pref'))
+	sendConnection.set_station_mbps_up_limit(result.get('mbps_up_limit'))
+	sendConnection.set_station_mbps_up_pref(result.get('mbps_up_pref'))
+	sendConnection.set_station_contact_name(result.get('contact_name'))
+	sendConnection.set_station_contact_phone(result.get('contact_phone'))
+	sendConnection.set_station_contact_email(result.get('contact_email'))
+	sendConnection.set_station_contact_company(result.get('contact_company'))
+	sendConnection.set_station_contact_notes(result.get('contact_notes'))
+################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############## FUNC DISPLAY CURRENT OBJECT DATA #############
+## This funtion:
+#### displace the sendObj Object data for the instance
+#### that is passed into it
+
+def displaySendObj(instance):
+	print()
+	print('###########  Displaying connection data in sendObj  ########### ')
+	print('IDENT:   ', instance.get_station_ident())
+	print('IP:      ', instance.get_station_ip())
+	print('MODE:    ', instance.get_station_mode())
+	print('DOWN (L) ', instance.get_station_mbps_down_limit())
+	print('DOWN (P) ', instance.get_station_mbps_down_pref())
+	print('UP (L)   ', instance.get_station_mbps_up_limit())
+	print('UP (P)   ', instance.get_station_mbps_up_pref())
+	print()
+	print('###########  Displaying contact data in sendObj  ###########')
+	print('NAME:    ', instance.get_station_contact_name())
+	print('PHONE:   ', instance.get_station_contact_phone())
+	print('EMAIL:   ', instance.get_station_contact_email())
+	print('COMPANY: ', instance.get_station_contact_company())
+	print('NOTES:   ', instance.get_station_contact_notes())
+	print()
+	print()
+
+############ END FUNC DISPLAY CURRENT OBJECT DATA #############
+###############################################################
+
+
+
+##initiate an intance of the sendObj class 
+sendConnection = sendObj(station)
+
+if (sendConnection):
+	print ('Ident: ', sendConnection.get_station_ident())
+
+updateSend(station)
+displaySendObj(sendConnection)
+
+
+
+
+
+
+
+
+
+
+
+
