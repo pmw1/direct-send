@@ -727,11 +727,14 @@ def buildObeRunner():
 
 		obe_send_file.write(bytes("screen -p 0 -S $NAME -X stuff $\"start" + r'\012' + "\"\n", 'UTF-8'))
 
+	obe_send_file.write(bytes("screen -r\n", 'UTF-8'))
+
 			### lowlat setting could be  auto, but better to be in db and pull into script
 
 	obe_send_file.close()
 
-	os.chmod('hostfiles/start-obe.sh', stat.S_IXGRP)
+
+	##os.chmod('hostfiles/start-obe.sh', stat.S_IXOTH)
 
 ###################  END BUILD OBE RUNNER   ###################
 ###############################################################
@@ -834,15 +837,15 @@ def initiateObeDockerTemp():
 	obe_start_docker.write(bytes("--name=\"obe\" ", 'UTF-8'))
 	obe_start_docker.write(bytes("-v /home/kevin/py-apps/direct-send/hostfiles:/home/default/hostfiles ", 'UTF-8'))
 	obe_start_docker.write(bytes("-v /home/kevin/recorded-video:/home/default/recorded-video ", 'UTF-8'))
-	obe_start_docker.write(bytes("-i -t ", 'UTF-8'))
-	##obe_start_docker.write(bytes("--entrypoint=\"/home/default/hostfiles/start-obe.sh\" ", 'UTF-8'))
-	obe_start_docker.write(bytes("--entrypoint=\"/bin/bash\" ", 'UTF-8'))
+	obe_start_docker.write(bytes("--privileged -i -t -d ", 'UTF-8'))
+	##obe_start_docker.write(bytes("--entrypoint=\"/home/default/entrypoint.sh\" ", 'UTF-8'))
+	##obe_start_docker.write(bytes("--entrypoint=\"/bin/bash\" ", 'UTF-8'))
 	obe_start_docker.write(bytes("--device /dev/blackmagic/io0 ", 'UTF-8'))
-	obe_start_docker.write(bytes("pmw1/obe-rt-send ", 'UTF-8'))
+	obe_start_docker.write(bytes("pmw1/direct-send ", 'UTF-8'))
 
 	obe_start_docker.close()
 
-	os.chmod('hostfiles/start-docker.sh', stat.S_IXOTH)
+	##os.chmod('hostfiles/start-docker.sh', stat.S_IXOTH)
 
 	call(['bash', 'hostfiles/start-docker.sh'])
 
@@ -933,3 +936,4 @@ if (sendConnection):
 
 
 
+  

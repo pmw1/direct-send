@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run --name="obe" -v /home/kevin/py-apps/direct-send/hostfiles:/home/default/hostfiles -v /home/kevin/recorded-video:/home/default/recorded-video -i -t --entrypoint="/bin/bash" --device /dev/blackmagic/io0 pmw1/obe-rt-send 
+docker run --name="obe" -v /home/kevin/py-apps/direct-send/hostfiles:/home/default/hostfiles -v /home/kevin/recorded-video:/home/default/recorded-video --privileged -i -t -d --device /dev/blackmagic/io0 pmw1/direct-send 
