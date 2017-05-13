@@ -16,6 +16,7 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--station', '-s', help="Station destination identity")
 	parser.add_argument('--profile', '-p', help="Override default profile")
+	parser.add_argument('--force',   '-f', help="Force existing docker to close")
 	## Replicate above line to add more optional input arguments
 	
 	args = parser.parse_args()
@@ -23,6 +24,13 @@ if __name__ == "__main__":
 	print("Retrieving station details for station Ident: ", args.station)
 	station = args.station
 	profile = args.profile
+
+	if(args.force=='1'):
+		force=1
+	else:
+		force=0
+	
+
 ######## END Processing input args into variables ############
 
 
@@ -834,11 +842,10 @@ def initiateObeDockerTemp():
 
 	obe_start_docker.write(bytes("#!/bin/bash\n", 'UTF-8'))
 	obe_start_docker.write(bytes("docker run ", 'UTF-8'))
-	obe_start_docker.write(bytes("--name=\"obe\" ", 'UTF-8'))
+	obe_start_docker.write(bytes("--name=\"direct-send\" ", 'UTF-8'))
 	obe_start_docker.write(bytes("-v /home/kevin/py-apps/direct-send/hostfiles:/home/default/hostfiles ", 'UTF-8'))
 	obe_start_docker.write(bytes("-v /home/kevin/recorded-video:/home/default/recorded-video ", 'UTF-8'))
 	obe_start_docker.write(bytes("--privileged -i -t -d ", 'UTF-8'))
-	##obe_start_docker.write(bytes("--entrypoint=\"/home/default/entrypoint.sh\" ", 'UTF-8'))
 	##obe_start_docker.write(bytes("--entrypoint=\"/bin/bash\" ", 'UTF-8'))
 	obe_start_docker.write(bytes("--device /dev/blackmagic/io0 ", 'UTF-8'))
 	obe_start_docker.write(bytes("pmw1/direct-send ", 'UTF-8'))
@@ -855,8 +862,12 @@ def initiateObeDockerTemp():
 
 
 
+
+
+
+
 ######################################################################################
-################################ SET ACTIVE STTUS  #################################
+################################ SET ACTIVE STATUS  #################################
 ##### connect to database and change change status to active
 ##### 
 
@@ -892,14 +903,56 @@ def setActive():
 	finally:
 		conn.close
 
-
-
-
 ###############################  END SET ACTIVE STATE  ##############################
 ######################################################################################
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+######################################################################################
+################################ FORCE SAME NAME CONTAINER DOWN  #####################
+
+def forceSameNameContainerDown(name):
+	bashCommand="sudo docker rm -f " + name
+	os.system(bashCommand)
+
+######################################################################################
+############################ END FORCE SAME NAME CONTAINER DOWN  #####################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if (force==1):
+	print("FORCING")
+	forceSameNameContainerDown('direct-send')
 
 
 

@@ -15,6 +15,6 @@ screen -p 0 -S $NAME -X stuff $"set stream opts 1:pid=1001,bitrate=256,format=aa
 screen -p 0 -S $NAME -X stuff $"set muxer opts ts-type=generic,ts-muxrate=9000000\012"
 screen -p 0 -S $NAME -X stuff $"set output udp\012"
 screen -p 0 -S $NAME -X stuff $"set outputs 1\012"
-screen -p 0 -S $NAME -X stuff $"set output opts 0:target=udp://72.0.154.251:3000\012"
+screen -p 0 -S $NAME -X stuff $"set output opts 0:target=udp://72.0.154.251:3001\012"
 screen -p 0 -S $NAME -X stuff $"start\012"
 screen -r
