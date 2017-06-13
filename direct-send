@@ -5,7 +5,7 @@ import random
 import os
 
 
-
+user=os.getlogin()
 
 
 
@@ -642,7 +642,7 @@ def buildObeRunner():
 	obe_send_file.write(bytes("#!/bin/bash\n", 'UTF-8'))
 	obe_send_file.write(bytes("NAME=obe\n", 'UTF-8'))
 	obe_send_file.write(bytes("screen  -d -m -S $NAME obecli\n", 'UTF-8'))
-	obe_send_file.write(bytes("sleep 1\n", 'UTF-8'))
+	obe_send_file.write(bytes("sleep 2\n", 'UTF-8'))
 	obe_send_file.write(bytes("screen -p 0 -S $NAME -X stuff $\"set input decklink" + r"\012" +"\"\n", 'UTF-8'))
 	obe_send_file.write(bytes("screen -p 0 -S $NAME -X stuff $\"set input opts card-idx=0" + r"\012" +"\"\n", 'UTF-8'))
 	obe_send_file.write(bytes("screen -p 0 -S $NAME -X stuff $\"set input opts video-format=%s" % sendConnection.get_profile_v_video_format() + r'\012' +'\"\n' , 'UTF-8'))
@@ -857,8 +857,8 @@ def initiateObeDockerTemp():
 	obe_start_docker.write(bytes("#!/bin/bash\n", 'UTF-8'))
 	obe_start_docker.write(bytes("docker run ", 'UTF-8'))
 	obe_start_docker.write(bytes("--name=\"direct-send\" ", 'UTF-8'))
-	obe_start_docker.write(bytes("-v /home/kevin/py-apps/direct-send/hostfiles:/home/default/hostfiles ", 'UTF-8'))
-	obe_start_docker.write(bytes("-v /home/kevin/recorded-video:/home/default/recorded-video ", 'UTF-8'))
+	obe_start_docker.write(bytes("-v /home/" + user + "/apps/direct-send/hostfiles:/home/default/hostfiles ", 'UTF-8'))
+	obe_start_docker.write(bytes("-v /home/" + user + "/recorded-video:/home/default/recorded-video ", 'UTF-8'))
 	obe_start_docker.write(bytes("--privileged -i -t -d ", 'UTF-8'))
 	##obe_start_docker.write(bytes("--entrypoint=\"/bin/bash\" ", 'UTF-8'))
 	obe_start_docker.write(bytes("--device /dev/blackmagic/io0 ", 'UTF-8'))
