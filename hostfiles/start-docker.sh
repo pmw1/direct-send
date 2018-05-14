@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run --name="direct-send" -v /home/pmw/apps/direct-send/hostfiles:/home/default/hostfiles -v /home/pmw/recorded-video:/home/default/recorded-video --privileged -i -t -d --device /dev/blackmagic/io0 pmw1/direct-send 
+docker run --name="direct-send" -v /home/kevin/apps/direct-send/hostfiles:/home/default/hostfiles -v /home/kevin/recorded-video:/home/default/recorded-video --privileged -i -t -d --device /dev/blackmagic/io0 pmw1/direct-send 

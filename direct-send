@@ -745,7 +745,7 @@ def buildObeRunner():
 	
 	if(sendConnection.get_profile_tx_mode() is not None) and (sendConnection.get_station_ip() is not None):
 		obe_send_file.write(bytes('screen -p 0 -S $NAME -X stuff ', 'UTF-8'))
-		obe_send_file.write(bytes('$\"set output opts 0:target={0}://{1}:{2}'.format(sendConnection.get_profile_tx_mode(), sendConnection.get_station_ip(), sendConnection.get_station_port_receive())  + r'\012' +'\"\n', 'UTF-8'))
+		obe_send_file.write(bytes('$\"set output opts 0:target={0}://{1}:3000'.format(sendConnection.get_profile_tx_mode(), sendConnection.get_station_ip())  + r'\012' +'\"\n', 'UTF-8'))
 
 		obe_send_file.write(bytes("screen -p 0 -S $NAME -X stuff $\"start" + r'\012' + "\"\n", 'UTF-8'))
 
