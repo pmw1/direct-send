@@ -1,0 +1,22 @@
+#!/bin/bash
+
+NAME=obe_hd
+
+screen -d -m -S $NAME obecli
+sleep 1
+screen -p 0 -S $NAME -X stuff $'set input Decklink\012'
+screen -p 0 -S $NAME -X stuff $'set input opts card-idx=0\012'
+screen -p 0 -S $NAME -X stuff $'set input opts video-format=1080i59.94\012'
+screen -p 0 -S $NAME -X stuff $'set input opts video-connection=sdi\012'
+screen -p 0 -S $NAME -X stuff $'set input opts audio-connection=embedded\012'
+screen -p 0 -S $NAME -X stuff $'set obe opts system-type=lowestlatency\012'
+screen -p 0 -S $NAME -X stuff $'probe input\012'
+sleep 2
+screen -p 0 -S $NAME -X stuff $'set stream opts 0:pid=1000,vbv-maxrate=10000,bitrate=5000,keyint=24,bframes=3,threads=4,format=avc,profile=high,level=4\012'
+screen -p 0 -S $NAME -X stuff $'set stream opts 1:pid=1001,bitrate=64,format=aac,aac-profile=he-aac-v1,aac-encap=latm\012'
+screen -p 0 -S $NAME -X stuff $'set muxer opts pmt-pid=100,ts-muxrate=10000000,ts-type=dvb\012'
+screen -p 0 -S $NAME -X stuff $'set output udp\012'
+screen -p 0 -S $NAME -X stuff $'set outputs 1\012'
+screen -p 0 -S $NAME -X stuff $'set output opts 0:target=udp://65.183.132.224:3000?ttl=5\012'
+screen -p 0 -S $NAME -X stuff $'start\012'
+screen -r $NAME 
